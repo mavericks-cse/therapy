@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Therapy Dashboard</title>
+  <link rel="stylesheet" href="css/style.css"> <!-- optional CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      color: #4CAF50;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    li {
+      background: #f2f2f2;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>My Appointments</h2>
+  <ul id="appointmentsList">
+    <!-- Appointments will be inserted here -->
+  </ul>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please log in first.');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:2005/api/appointments/my-appointments', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          console.log('Appointments:', data);
+
+          const list = document.getElementById('appointmentsList');
+          list.innerHTML = '';
+
+          if (data.length === 0) {
+            list.innerHTML = '<li>No appointments found.</li>';
+          } else {
+            data.forEach(appt => {
+              const li = document.createElement('li');
+              li.innerHTML = `
+                <strong>Date:</strong> ${appt.date} <br>
+                <strong>Time:</strong> ${appt.time} <br>
+                <strong>Therapist:</strong> ${appt.therapistId?.name || 'N/A'} <br>
+                <strong>Notes:</strong> ${appt.notes || '—'}
+              `;
+              list.appendChild(li);
+            });
+          }
+
+        } else {
+          alert(data.message || 'Error fetching appointments');
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+      }
+    });
+  </script>
+
+</body>
+</html>

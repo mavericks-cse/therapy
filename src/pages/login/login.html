@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Online Therapy</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      
+      <!-- Role selection dropdown -->
+      <select id="loginRole" required>
+        <option value="">Select Role</option>
+        <option value="user">User</option>
+        <option value="therapist">Therapist</option>
+      </select>
+      
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+  </div>
+  <a href="dashboard.html" class="nav-btn">Login</a>
+  <script src="login.js"></script>
+</body>
+</html>
